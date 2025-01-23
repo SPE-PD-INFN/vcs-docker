@@ -1,0 +1,23 @@
+#!/usr/bin/expect
+
+# Set timeout for responses
+set timeout -1
+
+# Define variables for base_dir and installer_version
+set base_dir "/usr/synopsys"
+set installer_version "v5.7"
+
+# Start the batch installer
+set env(USER) "docker"
+spawn ${base_dir}/installer_${installer_version}/batch_installer -install_as_root -source /tmp/installer/ -target ${base_dir}/ -allprods
+
+# Handle the license agreement prompt
+expect "*Do you accept the fpga End User License Agreement?*"
+send "A\r"
+
+# Handle the installation confirmation
+expect "*Accept, Install?*"
+send "yes\r"
+
+# Continue until the script finishes
+expect eof
